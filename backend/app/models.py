@@ -40,3 +40,13 @@ class Anime(Base):
     episodes: int = Column(String, nullable=True)
     aired: str = Column(String, nullable=True)
     image_url: str = Column(String, nullable=True)
+
+
+class Review(Base):
+    __tablename__ = 'review'
+    anime_id: int = Column(Integer, ForeignKey("animes.anime_id", ondelete="CASCADE"), primary_key=True, nullable=False)
+    anime = relationship("Anime")
+    user_id: int = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), primary_key=True, nullable=False)
+    user = relationship("User")
+    rating: float = Column(Numeric, nullable=False)
+    content: str = Column(String, nullable=False)
