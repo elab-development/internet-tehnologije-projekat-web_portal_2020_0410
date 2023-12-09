@@ -28,7 +28,7 @@ def hot_posts(url: str = 'https://oauth.reddit.com', header: dict = None) -> lis
                               'author': post['data']['author'],
                               'num_comments': post['data']['num_comments'],
                               'permalink': post['data']['permalink']})
-            return top_posts
+    return top_posts
 
 
 def weekly_top_posts(url: str = 'https://oauth.reddit.com', header: dict = None) -> list[dict]:
