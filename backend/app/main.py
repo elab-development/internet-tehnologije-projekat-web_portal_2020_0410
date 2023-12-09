@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from routers import user
+import uvicorn
 
 app = FastAPI()
 app.include_router(user.router)
@@ -9,3 +10,7 @@ app.include_router(user.router)
 @app.get("/")
 async def root():
     return {"message": "Hi mom"}
+
+
+if __name__ == "main":
+    uvicorn.run(app, port=10000)
