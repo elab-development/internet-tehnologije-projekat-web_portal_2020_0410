@@ -4,7 +4,7 @@ from sqlalchemy import desc
 from sqlalchemy.sql import func, select
 from sqlalchemy.orm import Session
 from models import Review, Anime, User
-from dtos import ReviewPost, ReviewPut
+from dtos import ReviewCreate, ReviewUpdate
 
 router = APIRouter(
     prefix="/reviews",
@@ -57,7 +57,7 @@ def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db)):
 
 # TO-DO: current user
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_review(review: ReviewPost, db: Session = Depends(get_db)):
+def create_review(review: ReviewCreate, db: Session = Depends(get_db)):
     new_review = Review(**review.dict())
     db.add(new_review)
     db.commit()
@@ -66,7 +66,7 @@ def create_review(review: ReviewPost, db: Session = Depends(get_db)):
 
 
 @router.put("/{username}/{anime_id}")
-def update_review(username: str, anime_id: int, updated_review: ReviewPut, db: Session = Depends(get_db)):
+def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == username).first()
     review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
     review = review_query.first()
@@ -80,7 +80,7 @@ def update_review(username: str, anime_id: int, updated_review: ReviewPut, db: S
 
 
 @router.delete("/{username}/{anime_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_posts(username: str, anime_id: int, db: Session = Depends(get_db)):
+def delete_review(username: str, anime_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == username).first()
     review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
     review = review_query.first()
