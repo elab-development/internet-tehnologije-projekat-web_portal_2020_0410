@@ -6,3 +6,8 @@ class ReviewPost(BaseModel):
     user_id: int
     rating: float
     content: str
+
+
+class ReviewPut(BaseModel):
+    rating: float
+    content: str

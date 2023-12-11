@@ -16,9 +16,9 @@ router = APIRouter(
 def get_anime(anime: str, db: Session = Depends(get_db)):
     search = f"%{anime}%"
     animes = db\
-        .query(Anime.name, Anime.english_name)\
+        .query(Anime)\
         .filter(Anime.name.like(search))\
-        .limit(20)
+        .all()
 
     if not animes:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Best rated anime is not available")

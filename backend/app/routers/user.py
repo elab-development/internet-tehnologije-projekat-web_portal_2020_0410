@@ -10,7 +10,7 @@ router = APIRouter(
 
 
 # TO-DO: response model
-@router.get("/{id}")
+@router.get("/search/{id}")
 def get_user(ID: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.user_id == ID).first()
     if not user:

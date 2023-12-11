@@ -1,10 +1,10 @@
-from fastapi import status, HTTPException, Depends, APIRouter
+from fastapi import status, HTTPException, Depends, APIRouter, Response
 from database import get_db
 from sqlalchemy import desc
 from sqlalchemy.sql import func, select
 from sqlalchemy.orm import Session
 from models import Review, Anime, User
-from dtos import ReviewPost
+from dtos import ReviewPost, ReviewPut
 
 router = APIRouter(
     prefix="/reviews",
@@ -63,3 +63,31 @@ def create_review(review: ReviewPost, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_review)
     return new_review
+
+
+@router.put("/{username}/{anime_id}")
+def update_review(username: str, anime_id: int, updated_review: ReviewPut, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
+    review = review_query.first()
+
+    if review is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
+
+    review_query.update(updated_review.dict(), synchronize_session=False)
+    db.commit()
+    return review_query.first()
+
+
+@router.delete("/{username}/{anime_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_posts(username: str, anime_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == username).first()
+    review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
+    review = review_query.first()
+
+    if review is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
+
+    review_query.delete(synchronize_session=False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
