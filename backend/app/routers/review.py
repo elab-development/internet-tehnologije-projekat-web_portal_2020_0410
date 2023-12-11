@@ -4,6 +4,7 @@ from sqlalchemy import desc
 from sqlalchemy.sql import func, select
 from sqlalchemy.orm import Session
 from models import Review, Anime, User
+from dtos import ReviewPost
 
 router = APIRouter(
     prefix="/reviews",
@@ -13,7 +14,7 @@ router = APIRouter(
 
 # TO-DO: response model
 @router.get("/top/{limit}")
-def get_user(limit: int = 5, db: Session = Depends(get_db)):
+def get_top(limit: int = 5, db: Session = Depends(get_db)):
     animes = db\
         .query(Anime.name, func.avg(Review.rating).label('average'))\
         .group_by(Anime.name)\
@@ -25,8 +26,8 @@ def get_user(limit: int = 5, db: Session = Depends(get_db)):
     return animes
 
 
-@router.get("/content/{anime}")
-def get_content(anime: str, db: Session = Depends(get_db)):
+@router.get("/anime/{anime}")
+def get_review_by_anime_id(anime: str, db: Session = Depends(get_db)):
     search = f"%{anime}%"
     subquery = db\
         .query(Anime.anime_id)\
@@ -34,11 +35,31 @@ def get_content(anime: str, db: Session = Depends(get_db)):
         .subquery()
 
     contents = db\
-        .query(Review.content, Anime.name)\
+        .query(Anime.name, Review)\
         .join(Anime)\
         .filter(Review.anime_id.in_(select(subquery)))
     contents.all()
 
     if not contents:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Anime reviews are not available")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Anime reviews with the name: {anime} are "
+                                                                          f"not available")
     return contents
+
+
+@router.get("/user/{user_id}")
+def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db)):
+    reviews = db.query(Review).filter(Review.user_id == user_id).all()
+    if not reviews:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"reviews for user with id:{user_id} were "
+                                                                          f"not found")
+    return reviews
+
+
+# TO-DO: current user
+@router.post("/", status_code=status.HTTP_201_CREATED)
+def create_review(review: ReviewPost, db: Session = Depends(get_db)):
+    new_review = Review(**review.dict())
+    db.add(new_review)
+    db.commit()
+    db.refresh(new_review)
+    return new_review
