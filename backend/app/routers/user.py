@@ -2,7 +2,8 @@ from fastapi import status, HTTPException, Depends, APIRouter, Response
 from database import get_db
 from sqlalchemy.orm import Session
 from models import User
-from dtos import UserCreate, UserUpdate
+from dtos import UserCreate, UserUpdate, UserResponse
+from typing import List
 
 router = APIRouter(
     prefix="/users",
@@ -11,7 +12,7 @@ router = APIRouter(
 
 
 # TO-DO: response model
-@router.get("/search/{id}")
+@router.get("/search/{id}", status_code=status.HTTP_200_OK, response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
@@ -19,7 +20,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.get("/")
+@router.get("/", status_code=status.HTTP_200_OK, response_model=List[UserResponse])
 def get_all_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     if not users:
@@ -27,16 +28,16 @@ def get_all_users(db: Session = Depends(get_db)):
     return users
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    new_user = User(**user.dict())
+    new_user: User = User(**user.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
 
-@router.put("/{user_id}")
+@router.put("/{user_id}", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 def update_user(user_id: int, updated_user: UserUpdate, db: Session = Depends(get_db)):
     user_query = db.query(User).filter(User.user_id == user_id).first()
     user = user_query.first()

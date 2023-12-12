@@ -2,9 +2,10 @@ from fastapi import status, HTTPException, Depends, APIRouter, Response
 from database import get_db
 from sqlalchemy import desc
 from sqlalchemy.sql import func, select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, Query
 from models import Review, Anime, User
-from dtos import ReviewCreate, ReviewUpdate
+from dtos import ReviewCreate, ReviewUpdate, ReviewGet, ReviewResponse
+from typing import List
 
 router = APIRouter(
     prefix="/reviews",
@@ -13,7 +14,7 @@ router = APIRouter(
 
 
 # TO-DO: response model
-@router.get("/top/{limit}")
+@router.get("/top/{limit}", status_code=status.HTTP_200_OK)
 def get_top(limit: int = 5, db: Session = Depends(get_db)):
     animes = db\
         .query(Anime.name, func.avg(Review.rating).label('average'))\
@@ -26,9 +27,9 @@ def get_top(limit: int = 5, db: Session = Depends(get_db)):
     return animes
 
 
-@router.get("/anime/{anime}")
+@router.get("/anime/{anime}", status_code=status.HTTP_200_OK)
 def get_review_by_anime_id(anime: str, db: Session = Depends(get_db)):
-    search = f"%{anime}%"
+    search: str = f"%{anime}%"
     subquery = db\
         .query(Anime.anime_id)\
         .filter(Anime.name.like(search))\
@@ -46,7 +47,7 @@ def get_review_by_anime_id(anime: str, db: Session = Depends(get_db)):
     return contents
 
 
-@router.get("/user/{user_id}")
+@router.get("/user/{user_id}", status_code=status.HTTP_200_OK, response_model=List[ReviewResponse])
 def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db)):
     reviews = db.query(Review).filter(Review.user_id == user_id).all()
     if not reviews:
@@ -56,7 +57,7 @@ def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db)):
 
 
 # TO-DO: current user
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
 def create_review(review: ReviewCreate, db: Session = Depends(get_db)):
     new_review = Review(**review.dict())
     db.add(new_review)
@@ -65,7 +66,7 @@ def create_review(review: ReviewCreate, db: Session = Depends(get_db)):
     return new_review
 
 
-@router.put("/{username}/{anime_id}")
+@router.put("/{username}/{anime_id}", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
 def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == username).first()
     review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)

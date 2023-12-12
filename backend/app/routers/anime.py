@@ -4,6 +4,8 @@ from sqlalchemy import desc
 from sqlalchemy.sql import func, select
 from sqlalchemy.orm import Session
 from models import Review, Anime, User
+from dtos import AnimeResponse
+from typing import List
 
 router = APIRouter(
     prefix="/animes",
@@ -12,9 +14,9 @@ router = APIRouter(
 
 
 # TO-DO: response model
-@router.get("/search/{anime}")
-def get_anime(anime: str, db: Session = Depends(get_db)):
-    search = f"%{anime}%"
+@router.get("/search/{anime_name}", status_code=status.HTTP_200_OK, response_model=List[AnimeResponse])
+def get_anime(anime_name: str, db: Session = Depends(get_db)):
+    search: str = f"%{anime_name}%"
     animes = db\
         .query(Anime)\
         .filter(Anime.name.like(search))\
