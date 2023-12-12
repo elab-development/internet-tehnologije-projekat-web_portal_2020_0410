@@ -2,7 +2,7 @@ from fastapi import status, HTTPException, Depends, APIRouter, Response
 from database import get_db
 from sqlalchemy import desc
 from sqlalchemy.sql import func, select
-from sqlalchemy.orm import Session, Query
+from sqlalchemy.orm import Session
 from models import Review, Anime, User
 from dtos import ReviewCreate, ReviewUpdate, ReviewGet, ReviewResponse
 from typing import List

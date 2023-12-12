@@ -1,7 +1,5 @@
 from fastapi import status, HTTPException, Depends, APIRouter
 from database import get_db
-from sqlalchemy import desc
-from sqlalchemy.sql import func, select
 from sqlalchemy.orm import Session
 from models import Review, Anime, User
 from dtos import AnimeResponse
