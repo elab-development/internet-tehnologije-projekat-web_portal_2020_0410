@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from routers import user, review, anime
 import uvicorn
+from fastapi_pagination import add_pagination
 
 app = FastAPI()
 app.include_router(user.router)
@@ -15,4 +16,5 @@ async def root():
 
 
 if __name__ == "__main__":
+    add_pagination(app)
     uvicorn.run(app, port=10000)

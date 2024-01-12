@@ -16,7 +16,7 @@ router = APIRouter(
 
 
 # TO-DO: response model
-@router.get("/top/{limit}", status_code=status.HTTP_200_OK)
+@router.get("/top", status_code=status.HTTP_200_OK)
 def get_top(limit: int = 5, db: Session = Depends(get_db)):
     animes = db\
         .query(Anime.name, func.avg(Review.rating).label('average'))\
@@ -29,9 +29,9 @@ def get_top(limit: int = 5, db: Session = Depends(get_db)):
     return animes
 
 
-@router.get("/anime/{anime}", status_code=status.HTTP_200_OK)
-def get_review_by_anime_id(anime: str, db: Session = Depends(get_db)):
-    search: str = f"%{anime}%"
+@router.get("/anime", status_code=status.HTTP_200_OK)
+def get_review_by_anime_name(for_anime: str, db: Session = Depends(get_db)):
+    search: str = f"%{for_anime}%"
     subquery = db\
         .query(Anime.anime_id)\
         .filter(Anime.name.like(search))\
@@ -49,7 +49,7 @@ def get_review_by_anime_id(anime: str, db: Session = Depends(get_db)):
     return contents
 
 
-@router.get("/user/{user_id}", status_code=status.HTTP_200_OK, response_model=List[ReviewResponse])
+@router.get("/user", status_code=status.HTTP_200_OK, response_model=List[ReviewResponse])
 def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db)):
     reviews = db.query(Review).filter(Review.user_id == user_id).all()
     if not reviews:
@@ -73,7 +73,7 @@ def create_review(review: ReviewCreate, db: Session = Depends(get_db)):
         return None
 
 
-@router.put("/{username}/{anime_id}", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
+@router.put("/", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
 def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == username).first()
 
@@ -91,7 +91,7 @@ def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db
     return review_query.first()
 
 
-@router.delete("/{username}/{anime_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_review(username: str, anime_id: int, db: Session = Depends(get_db)):
     user_query = db.query(User).filter(User.username == username)
     user = user_query.first()

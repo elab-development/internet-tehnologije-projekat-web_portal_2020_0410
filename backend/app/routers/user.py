@@ -12,7 +12,7 @@ router = APIRouter(
 
 
 # TO-DO: response model
-@router.get("/search/{id}", status_code=status.HTTP_200_OK, response_model=UserResponse)
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
@@ -37,7 +37,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.put("/{user_id}", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
+@router.put("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 def update_user(user_id: int, updated_user: UserUpdate, db: Session = Depends(get_db)):
     user_query = db.query(User).filter(User.user_id == user_id).first()
     user = user_query.first()
@@ -50,7 +50,7 @@ def update_user(user_id: int, updated_user: UserUpdate, db: Session = Depends(ge
     return user_query.first()
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     user_query = db.query(User).filter(User.user_id == user_id)
     user = user_query.first()

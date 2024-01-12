@@ -3,9 +3,11 @@ from database import get_db
 from sqlalchemy.orm import Session
 from models import Review, Anime, User
 from dtos import AnimeResponse, AnimeCreate, AnimeUpdate
-from typing import List
+from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination import Page
 from sys import stderr
 import requests
+from sqlalchemy import select
 
 
 router = APIRouter(
@@ -14,18 +16,10 @@ router = APIRouter(
 )
 
 
-# TO-DO: response model
-@router.get("/search/{anime_name}", status_code=status.HTTP_200_OK, response_model=List[AnimeResponse])
+@router.get("/search", status_code=status.HTTP_200_OK, response_model=Page[AnimeResponse])
 def get_anime(anime_name: str, db: Session = Depends(get_db)):
     search: str = f"%{anime_name}%"
-    animes = db\
-        .query(Anime)\
-        .filter(Anime.name.like(search))\
-        .all()
-
-    if not animes:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Best rated anime is not available")
-    return animes
+    return paginate(db, select(Anime).filter(Anime.name.like(search)))
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=AnimeResponse)
@@ -41,9 +35,9 @@ def create_anime(anime: AnimeCreate, db: Session = Depends(get_db)):
         return None
 
 
-@router.delete("/{anime_name}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_anime(anime_name: str, db: Session = Depends(get_db)):
-    anime_query = db.query(Anime).filter(Anime.name == anime_name)
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+def delete_anime(anime_id: str, db: Session = Depends(get_db)):
+    anime_query = db.query(Anime).filter(Anime.anime_id == anime_id)
     anime = anime_query.first()
 
     if anime is None:
@@ -54,7 +48,7 @@ def delete_anime(anime_name: str, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.put("/{anime_id}", status_code=status.HTTP_201_CREATED, response_model=AnimeResponse)
+@router.put("/", status_code=status.HTTP_201_CREATED, response_model=AnimeResponse)
 def update_anime(anime_id: int, updated_anime: AnimeUpdate, db: Session = Depends(get_db)):
     anime_query = db.query(Anime).filter(Anime.anime_id == anime_id)
     anime = anime_query.first()
@@ -67,7 +61,7 @@ def update_anime(anime_id: int, updated_anime: AnimeUpdate, db: Session = Depend
     return anime_query.first()
 
 
-@router.get('/opinion/{anime_name}')
+@router.get('/opinion')
 def get_opinion(anime_name: str):
     url = f"http://127.0.0.1:10001/opinion/{anime_name}"
     res = requests.get(url)
