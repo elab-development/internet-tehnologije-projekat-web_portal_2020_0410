@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from models import Review, Anime, User
 from dtos import ReviewCreate, ReviewUpdate, ReviewGet, ReviewResponse
 from typing import List
+from sys import stderr
+
 
 router = APIRouter(
     prefix="/reviews",
@@ -59,16 +61,25 @@ def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db)):
 # TO-DO: current user
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
 def create_review(review: ReviewCreate, db: Session = Depends(get_db)):
-    new_review = Review(**review.dict())
-    db.add(new_review)
-    db.commit()
-    db.refresh(new_review)
-    return new_review
+    try:
+        new_review = Review(**review.dict())
+        db.add(new_review)
+        db.commit()
+        db.refresh(new_review)
+        return new_review
+
+    except Exception as e:
+        stderr.write(f"Error occurred of type: {e}")
+        return None
 
 
 @router.put("/{username}/{anime_id}", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
 def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == username).first()
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
+
     review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
     review = review_query.first()
 
@@ -82,7 +93,12 @@ def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db
 
 @router.delete("/{username}/{anime_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_review(username: str, anime_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == username).first()
+    user_query = db.query(User).filter(User.username == username)
+    user = user_query.first()
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
+
     review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
     review = review_query.first()
 
