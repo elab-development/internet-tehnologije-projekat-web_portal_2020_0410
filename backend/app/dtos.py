@@ -17,6 +17,15 @@ class AnimeResponse(BaseModel):
         orm_mode = True
 
 
+class AnimeCreate(AnimeResponse):
+    pass
+
+
+class AnimeUpdate(BaseModel):
+    score: int
+    episodes: int
+
+
 class ReviewGet(BaseModel):
     anime_id: int
     user_id: int
