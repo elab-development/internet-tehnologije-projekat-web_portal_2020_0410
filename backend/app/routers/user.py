@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from models import User
 from dtos import UserCreate, UserUpdate, UserResponse
 from typing import List
+import utils
 
 router = APIRouter(
     prefix="/users",
@@ -11,7 +12,6 @@ router = APIRouter(
 )
 
 
-# TO-DO: response model
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.user_id == user_id).first()
@@ -30,6 +30,8 @@ def get_all_users(db: Session = Depends(get_db)):
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    hashed_password = utils.hash_bcrypt(user.password)
+    user.password = hashed_password
     new_user: User = User(**user.dict())
     db.add(new_user)
     db.commit()

@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 
+# TO-DO add EmailStr from pydantic instead of str
 class AnimeResponse(BaseModel):
     name: str
     score: Optional[float] = 0.0
