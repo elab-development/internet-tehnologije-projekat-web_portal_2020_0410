@@ -67,7 +67,6 @@ class UserCreate(BaseModel):
     last_name: str
     description: Optional[str] = None
     email: str
-    last_log_in: datetime
     role_id: int
 
 
@@ -77,3 +76,12 @@ class UserUpdate(BaseModel):
     last_name: str
     description: Optional[str] = None
     role_id: int
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    id: Optional[str] = None
