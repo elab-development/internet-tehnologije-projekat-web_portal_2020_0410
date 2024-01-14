@@ -1,11 +1,11 @@
 import sqlalchemy.exc
 from fastapi import status, HTTPException, Depends, APIRouter, Response
-from database import get_db
+from backend.app.database import get_db
 from sqlalchemy.orm import Session
-from models import User
-from dtos import UserCreate, UserUpdate, UserResponse
+from backend.app.models import User
+from backend.app.dtos import UserCreate, UserUpdate, UserResponse
 from typing import List
-import utils
+import backend.app.utils as utils
 from sys import stderr
 import fastapi
 from typing import Union
