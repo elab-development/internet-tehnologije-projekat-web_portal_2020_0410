@@ -67,7 +67,6 @@ class UserCreate(BaseModel):
     last_name: str
     description: Optional[str] = None
     email: str
-    last_log_in: datetime
     role_id: int
 
 
