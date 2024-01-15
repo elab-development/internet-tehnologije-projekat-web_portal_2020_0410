@@ -1,8 +1,8 @@
 from fastapi import status, HTTPException, Depends, APIRouter, Response
-from database import get_db
+from backend.app.database import get_db
 from sqlalchemy.orm import Session
-from models import Review, Anime, User
-from dtos import AnimeResponse, AnimeCreate, AnimeUpdate
+from backend.app.models import Anime
+from backend.app.dtos import AnimeResponse, AnimeCreate, AnimeUpdate
 from fastapi_pagination.ext.sqlalchemy import paginate
 from fastapi_pagination import Page
 from sys import stderr

@@ -1,14 +1,13 @@
 from fastapi import status, HTTPException, Depends, APIRouter, Response
-from database import get_db
+from backend.app.database import get_db
 from sqlalchemy import desc
 from sqlalchemy.sql import func, select
 from sqlalchemy.orm import Session
-from models import Review, Anime, User
-from dtos import ReviewCreate, ReviewUpdate, ReviewGet, ReviewResponse
-from typing import List
+from backend.app.models import Review, Anime, User
+from backend.app.dtos import ReviewCreate, ReviewUpdate, ReviewResponse
 from sys import stderr
-import oauth2
-from utils import get_dict
+import backend.app.oauth2 as oauth2
+from backend.app.utils import get_dict
 
 
 router = APIRouter(

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import user, review, anime, auth
+from backend.app.routers import user, review, anime, auth
 import uvicorn
 from fastapi_pagination import add_pagination
 
