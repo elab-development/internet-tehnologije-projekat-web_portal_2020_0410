@@ -43,10 +43,10 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         db.refresh(new_user)
         return new_user
     except sqlalchemy.exc.IntegrityError as e:
-        stderr.write(f"Integrity error {e}\n")
+        stderr.write(f"\nIntegrity error {e}\n")
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Integrity error {str(e.__dict__['orig'])}")
     except fastapi.exceptions.ResponseValidationError as e:
-        stderr.write(f"violated response model {e}\n")
+        stderr.write(f"\nviolated response model {e}\n")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"violated response model")
 
 

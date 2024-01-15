@@ -48,6 +48,7 @@ class ReviewUpdate(BaseModel):
 
 
 class UserResponse(BaseModel):
+    user_id: int
     username: str
     first_name: str
     last_name: str
