@@ -9,6 +9,7 @@ import backend.app.utils as utils
 from sys import stderr
 import fastapi
 from typing import Union
+import backend.app.oauth2 as oauth2
 
 router = APIRouter(
     prefix="/users",
@@ -74,3 +75,8 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     user_query.delete(synchronize_session=False)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.get("/me")
+def get_current_user(current_user: int = Depends(oauth2.get_current_user)):
+    return current_user
