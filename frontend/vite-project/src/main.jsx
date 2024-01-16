@@ -6,16 +6,19 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import Login from './routes/Login.jsx';
-import Signup from './routes/Signup.jsx'
+import { UserProvider } from './context/UserContext.jsx';
+import { LoginRoute } from './routes/LoginRoute.jsx';
+import { SignupRoute } from './routes/SignupRoute.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ChakraProvider>
-    <Router>
-      <Routes>
-          <Route path='/' element={<Login/>}/>
-          <Route path='/signup' element={<Signup/>}/>
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+            <Route path='/' element={<LoginRoute/>}/>
+            <Route path='/signup' element={<SignupRoute/>}/>
+        </Routes>
+      </Router>
+    </UserProvider>
   </ChakraProvider>,
 )
