@@ -77,6 +77,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get("/me")
+@router.get("/me", response_model=UserResponse)
 def get_current_user(current_user: int = Depends(oauth2.get_current_user)):
     return current_user

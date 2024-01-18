@@ -33,8 +33,11 @@ class ReviewGet(BaseModel):
     content: str
 
 
-class ReviewCreate(ReviewGet):
-    pass
+class ReviewCreate(BaseModel):
+    anime_name: str
+    user_id: int
+    rating: float
+    content: str
 
 
 class ReviewResponse(ReviewGet):

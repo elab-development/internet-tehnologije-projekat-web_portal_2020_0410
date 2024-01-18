@@ -77,7 +77,9 @@ def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db),
 def create_review(review: ReviewCreate, db: Session = Depends(get_db),
                   current_user: int = Depends(oauth2.get_current_user)):
     try:
-        new_review = Review(**review.dict())
+        search: str = f"%{review.anime_name}"
+        anime_id = db.query(Anime).filter(Anime.name.like(search)).first().anime_id
+        new_review = Review(anime_id=anime_id, user_id=review.user_id, rating=review.rating, content=review.content)
         db.add(new_review)
         db.commit()
         db.refresh(new_review)
@@ -89,14 +91,19 @@ def create_review(review: ReviewCreate, db: Session = Depends(get_db),
 
 
 @router.put("/", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
-def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db: Session = Depends(get_db),
+def update_review(username: str, anime_name: str, updated_review: ReviewUpdate, db: Session = Depends(get_db),
                   current_user: int = Depends(oauth2.get_current_user)):
     user = db.query(User).filter(User.username == username).first()
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
 
-    review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
+    anime = db.query(Anime).filter(Anime.name == anime_name).first()
+
+    if anime is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
+
+    review_query = db.query(Review).filter(Review.anime_id == anime.anime_id and Review.user_id == user.user_id)
     review = review_query.first()
 
     if review is None:
@@ -108,7 +115,7 @@ def update_review(username: str, anime_id: int, updated_review: ReviewUpdate, db
 
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
-def delete_review(username: str, anime_id: int, db: Session = Depends(get_db),
+def delete_review(username: str, anime_name: str, db: Session = Depends(get_db),
                   current_user: int = Depends(oauth2.get_current_user)):
     user_query = db.query(User).filter(User.username == username)
     user = user_query.first()
@@ -116,7 +123,12 @@ def delete_review(username: str, anime_id: int, db: Session = Depends(get_db),
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
 
-    review_query = db.query(Review).filter(Review.anime_id == anime_id and Review.user_id == user.user_id)
+    anime = db.query(Anime).filter(Anime.name == anime_name).first()
+
+    if anime is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"review cant be found")
+
+    review_query = db.query(Review).filter(Review.anime_id == anime.anime_id and Review.user_id == user.user_id)
     review = review_query.first()
 
     if review is None:
