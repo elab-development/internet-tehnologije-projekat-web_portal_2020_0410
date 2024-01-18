@@ -9,14 +9,17 @@ import {
 import { UserProvider } from './context/UserContext.jsx';
 import { LoginRoute } from './routes/LoginRoute.jsx';
 import { SignupRoute } from './routes/SignupRoute.jsx'
+import MyReviewsRoute from './routes/MyReviewsRoute.jsx'
+import customTheme from "./utils/themes.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ChakraProvider>
+  <ChakraProvider theme={customTheme}>
     <UserProvider>
       <Router>
         <Routes>
             <Route path='/' element={<LoginRoute/>}/>
             <Route path='/signup' element={<SignupRoute/>}/>
+            <Route path='/my_reviews' element={<MyReviewsRoute/>}/>
         </Routes>
       </Router>
     </UserProvider>
