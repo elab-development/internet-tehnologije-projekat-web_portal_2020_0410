@@ -1,15 +1,15 @@
 import React, { useContext } from 'react'
 import { UserContext } from '../context/UserContext'
-import Signup from '../components/Signup.jsx'
-import { LoginRoute } from './LoginRoute.jsx'
+import Login from '../components/Signup.jsx'
+import { Search } from '../components/Search.jsx'
 
-export const SignupRoute = () => {
+export const SearchRoute = () => {
   const [token, ] = useContext(UserContext)
   
     return (
         <>
         <div>
-            {token ? <LoginRoute/> : (<Signup/>)}
+            {token ? <Search/> : (<Login/>)}
         </div>
     </>
 
