@@ -1,18 +1,22 @@
 import React, { useContext } from 'react'
 import HeaderCustom from '../components/HeaderCustom'
 import { UserContext } from '../context/UserContext'
-import Signup from '../components/Signup.jsx'
+import MyReviews from '../components/MyReviews'
+import Login from '../components/Login'
 
-export const SignupRoute = () => {
+const MyReviewsRoute = () => {
   const [token, ] = useContext(UserContext)
   
     return (
         <>
         <HeaderCustom/>
         <div>
-            {token ? <p>Table</p> : (<Signup/>)}
+            {token ? <MyReviews/> : (<Login/>)}
         </div>
     </>
 
   )
 }
+
+
+export default MyReviewsRoute;
