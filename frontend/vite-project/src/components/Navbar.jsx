@@ -6,7 +6,7 @@ import { useContext, useState, useEffect } from "react";
 import Logo from "../crown.svg?react";
 
 const NavBar = (props) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
   const [token, ] = useContext(UserContext)
