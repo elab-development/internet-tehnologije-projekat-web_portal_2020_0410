@@ -181,7 +181,6 @@ const MyReviews = () => {
     if(!res.ok){
       console.log(res.json())
     }
-
     refreshPage();
   }
 

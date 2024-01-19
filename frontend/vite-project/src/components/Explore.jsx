@@ -24,71 +24,64 @@ import {
   Link,
 } from '@chakra-ui/react'
 import {GridLoader} from 'react-spinners'
-import "./Login.css"
 
-export const LoginRoute = () => {
-  const [token, ] = useContext(UserContext)
-  const [tableData, setTableData] = useState([])
-  const [tableHot, setTableHot] = useState([])
-  const [loadingTop, setLoadingTop] = useState(true)
-  const [loadingHot, setLoadingHot] = useState(true)
-  
-  
-  useEffect(()=>{
-    async function f(){
-      try{
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      
-        const response = await fetch("http://localhost:8000/animes/top", requestOptions);
-        if(!response.ok){
-          console.log('oh no')
-        }
-        const data = await response.json()
-        setTableData(data.slice(0, 7))
-      } finally{
-        setLoadingTop(false)
-      }
-      
-    }
-
-    async function g(){
-      try{
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      
-        const response = await fetch("http://localhost:8000/animes/hot", requestOptions);
-        if(!response.ok){
-          console.log('oh no')
-        }
-        const data = await response.json()
-        setTableHot(data.slice(0, 7))
-      }finally{
-        setLoadingHot(false)
-      }
-    }
-    f()
-    g()
+export const Explore = () => {
+    const [token, ] = useContext(UserContext)
+    const [tableData, setTableData] = useState([])
+    const [tableHot, setTableHot] = useState([])
+    const [loadingTop, setLoadingTop] = useState(true)
+    const [loadingHot, setLoadingHot] = useState(true)
     
-  }, [])
-
+    
+    useEffect(()=>{
+      async function f(){
+        try{
+          const requestOptions = {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          }
+        
+          const response = await fetch("http://localhost:8000/animes/top", requestOptions);
+          if(!response.ok){
+            console.log('oh no')
+          }
+          const data = await response.json()
+          setTableData(data.slice(0, 7))
+        } finally{
+          setLoadingTop(false)
+        }
+        
+      }
   
+      async function g(){
+        try{
+          const requestOptions = {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          }
+        
+          const response = await fetch("http://localhost:8000/animes/hot", requestOptions);
+          if(!response.ok){
+            console.log('oh no')
+          }
+          const data = await response.json()
+          setTableHot(data.slice(0, 7))
+        }finally{
+          setLoadingHot(false)
+        }
+      }
+      f()
+      g()
+      
+    }, [])
 
-
-    return (
-        <>
-        {token ?
-        <>
-        <HeaderCustom/>
-        <Heading as="h1" mt={6} marginBottom={10}>
+  return (
+    <>
+    <Heading as="h1" mt={6} marginBottom={5}>
           Top Anime News
         </Heading>
         {loadingTop ?
@@ -103,7 +96,7 @@ export const LoginRoute = () => {
         <SimpleGrid spacing={6} templateColumns='repeat(auto-fill, minmax(200px, 1fr))' style={{display: 'flex', justifyContent: 'space-evenly'}}>
           
         { tableData.map((item) => (
-            <Card className="link pop-on-hover" key={item.title} size={'md'} style={{flex: '1 1 0'}}>
+            <Card key={item.title} size={'md'} style={{flex: '1 1 0'}}>
             <CardHeader size='l'>
               <Heading size='md' > {`${item.title.slice(0,35)}...`}</Heading>
             </CardHeader>
@@ -123,7 +116,7 @@ export const LoginRoute = () => {
         ))}
        </SimpleGrid>
         }
-       <Heading as="h1" mt={6} marginBottom={10}>
+       <Heading as="h1" mt={6} marginBottom={5}>
           Hot Anime News
         </Heading>
         {loadingHot ? 
@@ -136,7 +129,7 @@ export const LoginRoute = () => {
         </div>  :
         <SimpleGrid spacing={6} templateColumns='repeat(auto-fill, minmax(200px, 1fr))' style={{display: 'flex'}}>   
         { tableHot.map((item) => (
-            <Card className="link pop-on-hover" key={item.title} size={'md'} style={{flex: '1 1 0'}}>
+            <Card key={item.title} size={'md'} style={{flex: '1 1 0'}}>
             <CardHeader>
               <Heading size='md' >{`${item.title.slice(0,35)}...`}</Heading>
             </CardHeader>
@@ -153,11 +146,13 @@ export const LoginRoute = () => {
           </Card>    
         ))}
        </SimpleGrid>
-       }
-       </> 
-          : (<Login/>)}
-        
-    </>
 
+       }
+       <Link href='/'>
+            <Button margin={10} color={"GREEN"}>
+                Back
+            </Button>
+       </Link>
+       </> 
   )
 }

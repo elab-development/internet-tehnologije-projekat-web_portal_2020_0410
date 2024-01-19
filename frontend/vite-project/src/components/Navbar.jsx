@@ -54,8 +54,10 @@ const NavBar = (props) => {
 
   return (
     <NavBarContainer {...props}>
-      <Logo />
-      <Button className="button" onClick={onLogoutOpen}>{title}</Button>
+      <Stack spacing={8} direction='row'>
+        <Logo />
+        <Button className="button" onClick={onLogoutOpen}>{title}</Button>
+      </Stack>
       <Modal isOpen={isLogoutOpen} onClose={onLogoutClose}>
                     <ModalOverlay />
                     <ModalContent>

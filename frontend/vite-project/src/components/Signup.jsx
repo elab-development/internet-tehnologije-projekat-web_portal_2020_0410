@@ -28,7 +28,7 @@ const Login = () => {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [description, setDescription] = useState("")
-  const [role, setRole] = useState(1)
+  const [role,] = useState(2)
   const navigate = useNavigate();
 
 

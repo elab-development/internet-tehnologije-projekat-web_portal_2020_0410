@@ -33,7 +33,6 @@ export const Quote = () => {
   return (
     <>
     <Text>{quote}</Text>
-    <Text>{char}</Text>
     </>
   )
 }
