@@ -4,15 +4,11 @@ import { Button } from "@chakra-ui/react";
 import NavBar from "./Navbar";
 
 const HeaderCustom = ()=>{
-    const [token, setToken] = useContext(UserContext)
-    const handleLogout = () =>{
-        setToken(null)
-    }
+    const [token,] = useContext(UserContext)
     return(
         <div className="has-text-centered m-6">
             <div className="nav">
                 {token && <NavBar/>}
-                {token && (<Button className="button" onClick={handleLogout}>Logout</Button>)}
             </div>
             
         </div>

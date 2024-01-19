@@ -139,6 +139,16 @@ const Login = () => {
               >
                 Login
               </Button>
+              <Button
+              borderRadius={0}
+              variant="solid"
+              colorScheme="teal"
+              width="full"
+              >
+                <Link href="/explore">
+                Explore as quest
+                </Link>
+              </Button>
             </Stack>
           </form>
         </Box>

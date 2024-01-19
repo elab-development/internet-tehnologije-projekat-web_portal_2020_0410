@@ -67,10 +67,6 @@ const CreateReview = () => {
         console.log('error')
       }
     }
-    
-    function refreshPage() {
-      window.location.reload(false);
-    }
 
 
   return (
@@ -127,7 +123,7 @@ const CreateReview = () => {
               variant="solid"
               colorScheme="teal"
               width="full"
-              onClick={()=>{createReview(anime, userID, rating, content);refreshPage()}}
+              onClick={()=>{createReview(anime, userID, rating, content);}}
             >
               Create
             </Button>
