@@ -28,7 +28,14 @@ def get_top_rated_animes(limit: int = 5, db: Session = Depends(get_db),
 
     if not animes:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Best rated animes are not available")
-    return animes
+
+    result = []
+    for k, v in animes:
+        res = dict()
+        res["anime"] = k
+        res["rating"] = v
+        result.append(res)
+    return result
 
 
 @router.get("/anime", status_code=status.HTTP_200_OK)

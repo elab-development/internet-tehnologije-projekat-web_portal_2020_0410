@@ -58,7 +58,8 @@ def update_user(user_id: int, updated_user: UserUpdate, db: Session = Depends(ge
 
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"user cant be found")
-
+    hashed_password = utils.hash_bcrypt(updated_user.password)
+    updated_user.password = hashed_password
     user_query.update(updated_user.dict(), synchronize_session=False)
     db.commit()
     return user_query.first()

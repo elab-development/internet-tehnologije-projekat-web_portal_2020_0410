@@ -1,3 +1,4 @@
+import sqlalchemy
 from fastapi import status, HTTPException, Depends, APIRouter, Response
 from backend.app.database import get_db
 from sqlalchemy.orm import Session
@@ -80,3 +81,15 @@ def get_hot():
     url = "http://127.0.0.1:10001/hot"
     res = requests.get(url)
     return res.json()
+
+
+@router.get('/stats')
+def get_statistics(db: Session = Depends(get_db)):
+    anime = db.query(Anime.genres, sqlalchemy.func.count(Anime.anime_id)).group_by(Anime.genres).all()
+    res = []
+    for k, v in anime:
+        if k is None:
+            continue
+        res.append({"type": k, "number": v})
+    res.sort(key=lambda x: x["number"], reverse=True)
+    return res[:10]

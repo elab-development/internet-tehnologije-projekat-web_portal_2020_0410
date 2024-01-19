@@ -10,9 +10,9 @@ def get_opinion(anime_name: str) -> str:
     op = opinion(anime_name)
     if op >= 0.7:
         return 'great'
-    elif op >= 0.4:
+    elif op >= 0.6:
         return 'good'
-    elif op >= 0.3:
+    elif op >= 0.5:
         return 'ok'
     else:
         return 'bad'
