@@ -8,8 +8,8 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from fastapi_pagination import Page
 from sys import stderr
 import requests
-from sqlalchemy import select
-
+from sqlalchemy import select, desc
+from transformers import pipeline
 
 router = APIRouter(
     prefix="/animes",
@@ -18,9 +18,39 @@ router = APIRouter(
 
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=Page[AnimeResponse])
-def get_anime(anime_name: str, db: Session = Depends(get_db)):
+def get_anime(anime_name: str, ascending: bool, db: Session = Depends(get_db)):
     search: str = f"%{anime_name}%"
-    return paginate(db, select(Anime).filter(Anime.name.like(search)))
+    if ascending:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(Anime.name))
+    else:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(desc(Anime.name)))
+
+
+@router.get("/search/rating", status_code=status.HTTP_200_OK, response_model=Page[AnimeResponse])
+def get_anime(anime_name: str, ascending: bool, db: Session = Depends(get_db)):
+    search: str = f"%{anime_name}%"
+    if ascending:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(Anime.score))
+    else:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(desc(Anime.score)))
+
+
+@router.get("/search/genres", status_code=status.HTTP_200_OK, response_model=Page[AnimeResponse])
+def get_anime(anime_name: str, ascending: bool, db: Session = Depends(get_db)):
+    search: str = f"%{anime_name}%"
+    if ascending:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(Anime.genres))
+    else:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(desc(Anime.genres)))
+
+
+@router.get("/search/type", status_code=status.HTTP_200_OK, response_model=Page[AnimeResponse])
+def get_anime(anime_name: str, ascending: bool, db: Session = Depends(get_db)):
+    search: str = f"%{anime_name}%"
+    if ascending:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(Anime.type))
+    else:
+        return paginate(db, select(Anime).filter(Anime.name.like(search)).order_by(desc(Anime.type)))
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=AnimeResponse)
@@ -93,3 +123,12 @@ def get_statistics(db: Session = Depends(get_db)):
         res.append({"type": k, "number": v})
     res.sort(key=lambda x: x["number"], reverse=True)
     return res[:10]
+
+
+@router.get('/story')
+def get_statistics():
+    story_gen = pipeline("text-generation", "pranavpsv/gpt2-genre-story-generator")
+    s = "story "
+    while len(s) < 1000:
+        s += story_gen(s[-10:])[0]["generated_text"]
+    return {"story": s.rsplit(".", maxsplit=1)[0][6:]}

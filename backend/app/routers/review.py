@@ -41,10 +41,9 @@ def get_top_rated_animes(limit: int = 5, db: Session = Depends(get_db),
 @router.get("/anime", status_code=status.HTTP_200_OK)
 def get_review_by_anime_name(for_anime: str, db: Session = Depends(get_db),
                              current_user: int = Depends(oauth2.get_current_user)):
-    search: str = f"%{for_anime}%"
     subquery = db\
         .query(Anime.anime_id)\
-        .filter(Anime.name.like(search))\
+        .filter(Anime.name == for_anime)\
         .subquery()
     reviews = db\
         .query(Anime.name, Review.rating, Review.content, User.username)\
