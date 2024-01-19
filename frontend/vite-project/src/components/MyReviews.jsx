@@ -49,6 +49,10 @@ const MyReviews = () => {
     const [userID, setUserID] = useState(0)
     const [rating, setRating] = useState(0)
     const [content, setContent] = useState("")
+    const [focused, setFocused] = useState({anime: "", review_rating: 0, content: ""})
+    const [asc, setAsc] = useState(false)
+    const [ascComment, setAscComment] = useState(false)
+    const [ascAnime, setAscAnime] = useState(false)
     
   
     useEffect(()=>{
@@ -94,14 +98,50 @@ const MyReviews = () => {
                     Authorization: "Bearer " + token
                 }
             }
-            const res  = await fetch(`http://localhost:8000/reviews/user?user_id=${user_id}`, requestOption);
+            const res  = await fetch(`http://localhost:8000/reviews/user?user_id=${user_id}&ascending=${asc}`, requestOption);
             const d = await res.json()
             setReview(d)
             setUserID(user_id)
 
         }
         fetchUser()
-    }, [])
+    }, [asc])
+
+    useEffect(()=>{
+        const fetchUser = async()=>{
+        const requestOption = {
+          method: "GET",
+          RequestMode:'no-cors',
+          headers:{
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token
+          }
+        }
+        const res  = await fetch(`http://localhost:8000/reviews/user/name?user_id=${userID}&ascending=${ascAnime}`, requestOption);
+        const d = await res.json()
+        setReview(d)
+      }
+      fetchUser()
+    }, [ascAnime])
+
+    useEffect(()=>{
+      const fetchUser = async()=>{
+      const requestOption = {
+        method: "GET",
+        RequestMode:'no-cors',
+        headers:{
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+        }
+      }
+      const res  = await fetch(`http://localhost:8000/reviews/user/comment?user_id=${userID}&ascending=${ascComment}`, requestOption);
+      const d = await res.json()
+      setReview(d)
+    }
+    fetchUser()
+  }, [ascComment])
+
+
 
     const deleteReview = async (anime_name) =>{
         const requestOption = {
@@ -116,6 +156,8 @@ const MyReviews = () => {
       if(!res.status == 201){
         console.log('error')
       }
+
+      refreshPage();
     }
     
     function refreshPage() {
@@ -139,6 +181,8 @@ const MyReviews = () => {
     if(!res.ok){
       console.log(res.json())
     }
+
+    refreshPage();
   }
 
   
@@ -155,19 +199,19 @@ const MyReviews = () => {
               <Table variant='striped' colorScheme='teal'>
               <Thead>
                 <Tr>
-                  <Th>Anime</Th>
-                  <Th>Rating</Th>
-                  <Th>Comment</Th>
+                  <Th onClick={()=>{setAscAnime(!ascAnime);}}>Anime</Th>
+                  <Th onClick={()=>{setAsc(!asc);}}>Rating</Th>
+                  <Th onClick={()=>{setAscComment(!ascComment);}}>Comment</Th>
                 </Tr>
             </Thead>
             <Tbody>
               {review.length>0 && review.map((item =>
-              <Tr>
+              <Tr key={item.anime}>
                 <Td>{item.anime}</Td>
                 <Td>{item.review_rating}</Td>
                 <Td>{item.comment}</Td>
                 <Td>
-                  <Button onClick={onEditOpen}>Edit</Button>
+                  <Button onClick={()=>{onEditOpen();setFocused(item)}}>Edit</Button>
                   <Modal isOpen={isEditOpen} onClose={onEditClose}>
                     <ModalOverlay />
                     <ModalContent>
@@ -194,7 +238,7 @@ const MyReviews = () => {
                           <FormLabel>Anime name</FormLabel>
                             <InputGroup>
                               <Input
-                              value={item.anime}
+                              value={focused.anime}
                               disabled
                               />
                             </InputGroup>
@@ -226,7 +270,7 @@ const MyReviews = () => {
                         <Button colorScheme='blue' mr={3} onClick={onEditClose}>
                           Cancel
                         </Button>
-                        <Button variant='ghost' onClick={()=> {onEditClose();updateReview(item.anime);refreshPage();}}>Confirm</Button>
+                        <Button variant='ghost' onClick={()=> {onEditClose();updateReview(focused.anime);}}>Confirm</Button>
                       </ModalFooter>
                     </ModalContent>
                   </Modal>
@@ -246,13 +290,12 @@ const MyReviews = () => {
                         <Button colorScheme='blue' mr={3} onClick={onDeleteClose}>
                           Cancel
                         </Button>
-                        <Button variant='ghost' onClick={()=> {onDeleteClose();deleteReview(item.anime);refreshPage();}}>Confirm</Button>
+                        <Button variant='ghost' onClick={()=> {onDeleteClose();deleteReview(item.anime);}}>Confirm</Button>
                       </ModalFooter>
                     </ModalContent>
                   </Modal>
                 </Td>
-              </Tr>
-              
+              </Tr>    
               ))}
               </Tbody>
             </Table>

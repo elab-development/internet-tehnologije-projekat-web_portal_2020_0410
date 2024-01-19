@@ -43,7 +43,7 @@ export const Opinion = () => {
   return (
     <>
     <HeaderCustom/>
-    <Card align='center'>
+    <Card align='center' margin={40}>
   <CardHeader>
     <Heading size='md'> Get public opinion</Heading>
   </CardHeader>

@@ -66,6 +66,12 @@ const CreateReview = () => {
       if(!res.status == 201){
         console.log('error')
       }
+
+      refreshPage()
+    }
+
+    function refreshPage() {
+      window.location.reload(false);
     }
 
 
@@ -77,6 +83,8 @@ const CreateReview = () => {
             p="1rem"
             backgroundColor="whiteAlpha.900"
             boxShadow="md"
+            marginLeft={40}
+            marginRight={40}
           >
             <FormControl>
             <FormLabel>User ID</FormLabel>
@@ -119,7 +127,6 @@ const CreateReview = () => {
             </FormControl>
             <Button
               borderRadius={0}
-              type="submit"
               variant="solid"
               colorScheme="teal"
               width="full"
@@ -127,6 +134,15 @@ const CreateReview = () => {
             >
               Create
             </Button>
+            <Link href='/my_reviews'>
+            <Button
+            borderRadius={0}
+            variant="solid"
+            width="full"
+            >
+              Back
+            </Button>
+            </Link>
           </Stack>
         </form>
   )
