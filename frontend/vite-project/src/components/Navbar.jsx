@@ -6,7 +6,7 @@ import { useContext, useState, useEffect } from "react";
 import Logo from "../crown.svg?react";
 
 const NavBar = (props) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
   const [token, ] = useContext(UserContext)
@@ -30,6 +30,7 @@ const NavBar = (props) => {
           console.log(response)
         }
         setTitle(data["username"])
+
       }
       func()
     }, [token])
@@ -39,6 +40,7 @@ const NavBar = (props) => {
     <NavBarContainer {...props}>
       <Logo />
       <Text>{title}</Text>
+      
       <MenuToggle toggle={toggle} isOpen={isOpen} />
       <MenuLinks isOpen={isOpen} />
     </NavBarContainer>
@@ -100,9 +102,9 @@ const MenuLinks = ({ isOpen }) => {
       >
         <MenuItem to="/">Home</MenuItem>
         <MenuItem to="/my_reviews"> My Reviews </MenuItem>
-        <MenuItem to="/faetures"> Top rated </MenuItem>
-        <MenuItem to="/pricing"> Reddit </MenuItem>
-        <MenuItem to="/signup" isLast>
+        <MenuItem to="/opinion"> Get Opinion </MenuItem>
+        <MenuItem to="/search"> Search </MenuItem>
+        <MenuItem to="/admin" isLast>
           <Button
             size="sm"
             rounded="md"

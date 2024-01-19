@@ -11,6 +11,9 @@ import { LoginRoute } from './routes/LoginRoute.jsx';
 import { SignupRoute } from './routes/SignupRoute.jsx'
 import MyReviewsRoute from './routes/MyReviewsRoute.jsx'
 import customTheme from "./utils/themes.jsx";
+import CreateReviewRoute from './routes/CreateReviewRoute.jsx';
+import { SearchRoute } from './routes/SearchRoute.jsx'
+import { OpinionRoute } from './routes/OpinionRoute.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ChakraProvider theme={customTheme}>
@@ -20,6 +23,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path='/' element={<LoginRoute/>}/>
             <Route path='/signup' element={<SignupRoute/>}/>
             <Route path='/my_reviews' element={<MyReviewsRoute/>}/>
+            <Route path='/review/create' element={<CreateReviewRoute/>}/>
+            <Route path='/search' element={<SearchRoute/>}/>
+            <Route path='/opinion' element={<OpinionRoute/>}/>
         </Routes>
       </Router>
     </UserProvider>
