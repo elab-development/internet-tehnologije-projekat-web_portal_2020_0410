@@ -60,26 +60,113 @@ def get_review_by_anime_name(for_anime: str, db: Session = Depends(get_db),
 
 
 @router.get("/user", status_code=status.HTTP_200_OK)
-def get_reviews_by_user_id(user_id: int, db: Session = Depends(get_db),
+def get_reviews_by_user_id(user_id: int, ascending: bool, db: Session = Depends(get_db),
                            current_user: int = Depends(oauth2.get_current_user)):
     subquery = db \
         .query(User.user_id) \
         .filter(User.user_id == user_id) \
         .subquery()
-    reviews = db\
-        .query(Anime.name, Review.rating, Review.content, User.username)\
-        .join(Anime)\
-        .join(User)\
-        .filter(User.user_id.in_(select(subquery)))
 
-    reviews = get_dict(reviews.all())
-    if not reviews:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"reviews for user with id:{user_id} were "
-                                                                          f"not found")
+    if ascending:
+        reviews = db \
+            .query(Anime.name, Review.rating, Review.content, User.username) \
+            .join(Anime) \
+            .join(User) \
+            .filter(User.user_id.in_(select(subquery))).order_by(Review.rating)
+
+        reviews = get_dict(reviews.all())
+        if not reviews:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"reviews for user with id:{user_id} were "
+                                       f"not found")
+    else:
+        reviews = db \
+            .query(Anime.name, Review.rating, Review.content, User.username) \
+            .join(Anime) \
+            .join(User) \
+            .filter(User.user_id.in_(select(subquery))).order_by(desc(Review.rating))
+
+        reviews = get_dict(reviews.all())
+        if not reviews:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"reviews for user with id:{user_id} were "
+                                       f"not found")
+
     return reviews
 
 
-# TO-DO: current user
+@router.get("/user/name", status_code=status.HTTP_200_OK)
+def get_reviews_by_user_id_sorted_by_name(user_id: int, ascending: bool, db: Session = Depends(get_db),
+                           current_user: int = Depends(oauth2.get_current_user)):
+    subquery = db \
+        .query(User.user_id) \
+        .filter(User.user_id == user_id) \
+        .subquery()
+
+    if ascending:
+        reviews = db \
+            .query(Anime.name, Review.rating, Review.content, User.username) \
+            .join(Anime) \
+            .join(User) \
+            .filter(User.user_id.in_(select(subquery))).order_by(Anime.name)
+
+        reviews = get_dict(reviews.all())
+        if not reviews:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"reviews for user with id:{user_id} were "
+                                       f"not found")
+    else:
+        reviews = db \
+            .query(Anime.name, Review.rating, Review.content, User.username) \
+            .join(Anime) \
+            .join(User) \
+            .filter(User.user_id.in_(select(subquery))).order_by(desc(Anime.name))
+
+        reviews = get_dict(reviews.all())
+        if not reviews:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"reviews for user with id:{user_id} were "
+                                       f"not found")
+
+    return reviews
+
+
+@router.get("/user/comment", status_code=status.HTTP_200_OK)
+def get_reviews_by_user_id_sorted_by_comment(user_id: int, ascending: bool, db: Session = Depends(get_db),
+                           current_user: int = Depends(oauth2.get_current_user)):
+    subquery = db \
+        .query(User.user_id) \
+        .filter(User.user_id == user_id) \
+        .subquery()
+
+    if ascending:
+        reviews = db \
+            .query(Anime.name, Review.rating, Review.content, User.username) \
+            .join(Anime) \
+            .join(User) \
+            .filter(User.user_id.in_(select(subquery))).order_by(Review.content)
+
+        reviews = get_dict(reviews.all())
+        if not reviews:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"reviews for user with id:{user_id} were "
+                                       f"not found")
+    else:
+        reviews = db \
+            .query(Anime.name, Review.rating, Review.content, User.username) \
+            .join(Anime) \
+            .join(User) \
+            .filter(User.user_id.in_(select(subquery))).order_by(desc(Review.content))
+
+        reviews = get_dict(reviews.all())
+        if not reviews:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                                detail=f"reviews for user with id:{user_id} were "
+                                       f"not found")
+
+    return reviews
+
+
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=ReviewResponse)
 def create_review(review: ReviewCreate, db: Session = Depends(get_db),
                   current_user: int = Depends(oauth2.get_current_user)):
