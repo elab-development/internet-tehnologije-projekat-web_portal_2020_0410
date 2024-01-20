@@ -131,23 +131,23 @@ const MyReviews = () => {
    
     const updateReview = async (anime_name) =>{
       const requestOption = {
-        method: "PUT",
-        RequestMode:'no-cors',
-        headers:{
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token
-        },
-        body: JSON.stringify({
-          "rating": rating,
-          "content": content
-        })
+          method: "PUT",
+          RequestMode:'no-cors',
+          headers:{
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token
+          },
+          body: JSON.stringify({
+            "rating": rating,
+            "content": content
+          })
+        }
+      const res  = await fetch(`http://localhost:8000/reviews/?username=${title}&anime_name=${anime_name}`, requestOption);
+      if(!res.ok){
+        console.log(res.json())
+      }
+      refreshPage();
     }
-    const res  = await fetch(`http://localhost:8000/reviews/?username=${title}&anime_name=${anime_name}`, requestOption);
-    if(!res.ok){
-      console.log(res.json())
-    }
-    refreshPage();
-  }
 
   
     return (

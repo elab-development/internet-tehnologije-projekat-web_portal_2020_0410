@@ -39,7 +39,7 @@ const Login = () => {
     const data = await response.json()
 
     if(!response.ok){
-      //TO-DO: ADD ERROR SCREEN NOT LOGGED IN
+      alert("bad credentials")
       console.log(data.detail)
     }else{
       setToken(data.access_token)
