@@ -2,7 +2,7 @@
   <img src="https://lh3.googleusercontent.com/A2doAJk9Ah0HXBEHvpoZRXzEYk8WnEXbSM6R1tJ5_54o4sR_lld5e4DXqq5YQ7omsOugA5_kVPFfgG_mZ2qmmoU=w640-h400-e365-rj-sc0x00ffffff" width="400" height="200"> 
 </p>  
 
-This is a full stack web application made whith Unity with [React](https://react.dev/) as a frontend library and [FastApi](https://fastapi.tiangolo.com/) as a backend framework.  
+This is a full stack web application made with [React](https://react.dev/) as a frontend library and [FastApi](https://fastapi.tiangolo.com/) as a backend framework.  
 
 ***
 # **Features!**
