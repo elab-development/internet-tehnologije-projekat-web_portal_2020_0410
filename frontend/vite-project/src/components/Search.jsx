@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useState, useContext, useEffect } from "react";
+import React, {useState, useContext, useEffect } from "react";
 import {
   Button,
   Input,
@@ -8,24 +8,15 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Text
 } from "@chakra-ui/react";
-import {
-    ArrowRightIcon,
-    ArrowLeftIcon,
-    ChevronRightIcon,
-    ChevronLeftIcon
-  } from "@chakra-ui/icons";
 import { Search2Icon } from "@chakra-ui/icons";
 import HeaderCustom from "./HeaderCustom";
 import { UserContext } from "../context/UserContext";
-import { useTable, usePagination } from "react-table";
 import {
   Modal,
   ModalOverlay,
@@ -137,7 +128,6 @@ export const Search = () => {
         console.log(data)
         setRevs(data[0].comment)
       }
-
     }
     
 
@@ -162,116 +152,113 @@ export const Search = () => {
         </InputRightAddon>
       </InputGroup>
       <TableContainer>
-              <Table variant='striped' colorScheme='teal' __css={{'table-layout': 'fixed', width: 'full'}}>
-              <Thead>
-                <Tr>
-                  <Th onClick={()=>{setLast("title");setAscTitle(!ascTitle);}}>Title</Th>
-                  <Th onClick={()=>{setLast("score");setAscScore(!ascScore);}}>score</Th>
-                  <Th onClick={()=>{setLast("genres");setAscGenres(!ascGenres);}}>genres</Th>
-                  <Th onClick={()=>{setLast("type");setAscType(!ascType);}}>type</Th>
-                </Tr>
-            </Thead>
-            <Tbody>
-              {tableData.length > 0 && tableData.map((item =>
-              <Tr key={item.name}>
-                <Td>{item.name.length>25 ? `${item.name.slice(0,25)}...` : item.name}</Td>
-                <Td>{item.score}</Td>
-                <Td>{item.genres}</Td>
-                <Td>{item.type}</Td>
-                <Td>
-                  <Button onClick={()=>{onEditOpen();setFocused(item);}}>Info</Button>
-                  <Modal isOpen={isEditOpen} onClose={()=>{onEditClose();setRevs("no reviews")}}>
-                    <ModalOverlay />
-                    <ModalContent>
-                      <ModalHeader>Info</ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
-                      <form onSubmit={()=>{}}>
-                        <Stack
-                          spacing={4}
-                          p="1rem"
-                          backgroundColor="whiteAlpha.900"
-                          boxShadow="md"
-                        >
-                          <FormControl>
-                          <FormLabel>Name</FormLabel>
-                            <InputGroup>
-                              <Input
-                              value={focused.name}
-                              disabled
-                              />
-                            </InputGroup>
-                          </FormControl>
-                          <FormControl>
-                          <FormLabel>Score</FormLabel>
-                            <InputGroup>
-                              <Input
-                              value={focused.score}
-                              disabled
-                              />
-                            </InputGroup>
-                          </FormControl>
-                          <FormControl>
-                            <FormLabel>Genre</FormLabel>
-                            <InputGroup>
-                              <Input
-                              value={focused.genres}
-                              disabled
-                              />
-                            </InputGroup>
-                          </FormControl>
-                          <FormControl>
-                          <FormLabel>Type</FormLabel>
-                            <InputGroup>
-                              <Input
-                              value={focused.type}
-                              disabled
-                              />
-                            </InputGroup>
-                          </FormControl>
-                          <FormControl>
-                          <FormLabel>Latest Review</FormLabel>
-                            <InputGroup>
-                              <Input
-                              value={revw}
-                              disabled
-                              />
-                            </InputGroup>
-                          </FormControl>
-                        </Stack>
-                      </form>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={()=>{onEditClose();setRevs("no reviews")}}>
-                          Cancel
-                        </Button>
-                        <Button variant='ghost' onClick={()=> {getReviews()}}>Get Latest Review</Button>
-                      </ModalFooter>
-                    </ModalContent>
-                  </Modal>
-                </Td>
-              </Tr>
-              
-              ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          <InputGroup style={{display: 'flex', justifyContent: 'center'}}>
-            <Button onClick={()=>{page > 1 && setPage(page-1)}}>
-                Back
-            </Button>
-            <Text marginLeft={10} marginRight={10} marginTop={2}>
-                {page}
-            </Text>
-            <Button onClick={()=>{setPage(page+1);}}>
-                Next
-            </Button>
-          </InputGroup>
-          <InputGroup style={{display: 'flex', justifyContent: 'center'}}> 
-          {page > 1 && <Button onClick={()=>{setPage(1)}}>
-                First
-            </Button>}
-            </InputGroup>
+        <Table variant='striped' colorScheme='teal' __css={{'table-layout': 'fixed', width: 'full'}}>
+          <Thead>
+            <Tr>
+              <Th onClick={()=>{setLast("title");setAscTitle(!ascTitle);}}>Title</Th>
+              <Th onClick={()=>{setLast("score");setAscScore(!ascScore);}}>score</Th>
+              <Th onClick={()=>{setLast("genres");setAscGenres(!ascGenres);}}>genres</Th>
+              <Th onClick={()=>{setLast("type");setAscType(!ascType);}}>type</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {tableData.length > 0 && tableData.map((item =>
+            <Tr key={item.name}>
+              <Td>{item.name.length>25 ? `${item.name.slice(0,25)}...` : item.name}</Td>
+              <Td>{item.score}</Td>
+              <Td>{item.genres}</Td>
+              <Td>{item.type}</Td>
+              <Td>
+                <Button onClick={()=>{onEditOpen();setFocused(item);}}>Info</Button>
+                <Modal isOpen={isEditOpen} onClose={()=>{onEditClose();setRevs("no reviews")}}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Info</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                    <form onSubmit={()=>{}}>
+                      <Stack
+                        spacing={4}
+                        p="1rem"
+                        backgroundColor="whiteAlpha.900"
+                        boxShadow="md"
+                      >
+                        <FormControl>
+                        <FormLabel>Name</FormLabel>
+                          <InputGroup>
+                            <Input
+                            value={focused.name}
+                            disabled
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl>
+                        <FormLabel>Score</FormLabel>
+                          <InputGroup>
+                            <Input
+                            value={focused.score}
+                            disabled
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl>
+                          <FormLabel>Genre</FormLabel>
+                          <InputGroup>
+                            <Input
+                            value={focused.genres}
+                            disabled
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl>
+                        <FormLabel>Type</FormLabel>
+                          <InputGroup>
+                            <Input
+                            value={focused.type}
+                            disabled
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl>
+                        <FormLabel>Latest Review</FormLabel>
+                          <InputGroup>
+                            <Input
+                            value={revw}
+                            disabled
+                            />
+                          </InputGroup>
+                        </FormControl>
+                      </Stack>
+                    </form>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button colorScheme='blue' mr={3} onClick={()=>{onEditClose();setRevs("no reviews")}}>
+                        Cancel
+                      </Button>
+                      <Button variant='ghost' onClick={()=> {getReviews()}}>Get Latest Review</Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
+              </Td>
+            </Tr>
+            ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <InputGroup style={{display: 'flex', justifyContent: 'center'}}>
+          <Button onClick={()=>{page > 1 && setPage(page-1)}}>
+              Back
+          </Button>
+          <Text marginLeft={10} marginRight={10} marginTop={2}>
+              {page}
+          </Text>
+          <Button onClick={()=>{setPage(page+1);}}>
+              Next
+          </Button>
+        </InputGroup>
+        <InputGroup style={{display: 'flex', justifyContent: 'center'}}> 
+        {page > 1 && <Button onClick={()=>{setPage(1)}}>First</Button>}
+        </InputGroup>
     </>
   );
 };

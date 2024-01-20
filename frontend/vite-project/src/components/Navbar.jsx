@@ -59,22 +59,22 @@ const NavBar = (props) => {
         <Button className="button" onClick={onLogoutOpen}>{title}</Button>
       </Stack>
       <Modal isOpen={isLogoutOpen} onClose={onLogoutClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                      <ModalHeader>Logout</ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
-                        Are you sure you want to logout?
-                      </ModalBody>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Logout</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Are you sure you want to logout?
+          </ModalBody>
 
-                      <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onLogoutClose}>
-                          Cancel
-                        </Button>
-                        <Button variant='ghost' onClick={()=> {onLogoutClose();handleLogout();}}>Confirm</Button>
-                      </ModalFooter>
-                    </ModalContent>
-                  </Modal>
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onLogoutClose}>
+              Cancel
+            </Button>
+            <Button variant='ghost' onClick={()=> {onLogoutClose();handleLogout();}}>Confirm</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <MenuToggle toggle={toggle} isOpen={isOpen} />
       <MenuLinks isOpen={isOpen} />
     </NavBarContainer>

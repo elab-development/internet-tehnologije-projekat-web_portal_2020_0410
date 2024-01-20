@@ -3,15 +3,6 @@ import HeaderCustom from '../components/HeaderCustom'
 import { UserContext } from '../context/UserContext'
 import Login from '../components/Login'
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
   Card,
   SimpleGrid,
   CardHeader,
@@ -19,69 +10,19 @@ import {
   CardBody,
   CardFooter,
   Button,
-  Text,
-  Grid,
-  Link,
+  Text
 } from '@chakra-ui/react'
 import {GridLoader} from 'react-spinners'
 import "./Login.css"
+import { TopPosts } from '../components/TopPosts'
+import useFetch from '../hooks/useFetch'
 
 export const LoginRoute = () => {
   const [token, ] = useContext(UserContext)
-  const [tableData, setTableData] = useState([])
-  const [tableHot, setTableHot] = useState([])
-  const [loadingTop, setLoadingTop] = useState(true)
-  const [loadingHot, setLoadingHot] = useState(true)
-  
-  
-  useEffect(()=>{
-    async function f(){
-      try{
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      
-        const response = await fetch("http://localhost:8000/animes/top", requestOptions);
-        if(!response.ok){
-          console.log('oh no')
-        }
-        const data = await response.json()
-        setTableData(data.slice(0, 7))
-      } finally{
-        setLoadingTop(false)
-      }
-      
-    }
 
-    async function g(){
-      try{
-        const requestOptions = {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      
-        const response = await fetch("http://localhost:8000/animes/hot", requestOptions);
-        if(!response.ok){
-          console.log('oh no')
-        }
-        const data = await response.json()
-        setTableHot(data.slice(0, 7))
-      }finally{
-        setLoadingHot(false)
-      }
-    }
-    f()
-    g()
-    
-  }, [])
-
+  const {data: tableData, loading: loadingTop, } = useFetch("http://localhost:8000/animes/top")
+  const {data: tableHot, loading: loadingHot, } = useFetch("http://localhost:8000/animes/hot")
   
-
 
     return (
         <>
@@ -100,28 +41,7 @@ export const LoginRoute = () => {
         <GridLoader color="#36d7b7"/> 
         </div>
         :
-        <SimpleGrid spacing={6} templateColumns='repeat(auto-fill, minmax(200px, 1fr))' style={{display: 'flex', justifyContent: 'space-evenly'}}>
-          
-        { tableData.map((item) => (
-            <Card className="link pop-on-hover" key={item.title} size={'md'} style={{flex: '1 1 0'}}>
-            <CardHeader size='l'>
-              <Heading size='md' > {`${item.title.slice(0,35)}...`}</Heading>
-            </CardHeader>
-            <CardBody>
-              <Text>Upvote ratio: {item.upvote_ratio}</Text>
-              <Text>Upvotes: {item.ups}</Text>
-            </CardBody>
-            <CardFooter>
-              <a target='_blank'
-            rel='noopener noreferrer' href={`https://www.reddit.com/${item.permalink}`}>
-              <Button>View here</Button>
-              </a>
-            </CardFooter>
-          </Card>
-            
-            
-        ))}
-       </SimpleGrid>
+        <TopPosts tableData={tableData}/>
         }
        <Heading as="h1" mt={6} marginBottom={10}>
           Hot Anime News
@@ -134,25 +54,7 @@ export const LoginRoute = () => {
         }}>
         <GridLoader color="#36d7b7"/>
         </div>  :
-        <SimpleGrid spacing={6} templateColumns='repeat(auto-fill, minmax(200px, 1fr))' style={{display: 'flex'}}>   
-        { tableHot.map((item) => (
-            <Card className="link pop-on-hover" key={item.title} size={'md'} style={{flex: '1 1 0'}}>
-            <CardHeader>
-              <Heading size='md' >{`${item.title.slice(0,35)}...`}</Heading>
-            </CardHeader>
-            <CardBody>
-              <Text>Upvote ratio: {item.upvote_ratio}</Text>
-              <Text>Upvotes: {item.ups}</Text>
-            </CardBody>
-            <CardFooter>
-              <a target='_blank'
-            rel='noopener noreferrer' href={`https://www.reddit.com/${item.permalink}`}>
-              <Button>View here</Button>
-              </a>
-            </CardFooter>
-          </Card>    
-        ))}
-       </SimpleGrid>
+        <TopPosts tableData={tableHot}/>
        }
        </> 
           : (<Login/>)}

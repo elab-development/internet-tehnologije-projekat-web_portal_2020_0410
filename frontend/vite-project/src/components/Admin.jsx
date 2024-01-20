@@ -1,35 +1,32 @@
 import React from 'react'
 import HeaderCustom from './HeaderCustom'
 import { Quote } from './Quote'
-import { Button, Input, InputGroup, background } from '@chakra-ui/react'
+import { Button, Input, InputGroup} from '@chakra-ui/react'
 import { UserContext } from "../context/UserContext";
 import { useContext, useState, useEffect } from "react";
 import { Modal, ModalOverlay, ModalBody, ModalFooter, ModalContent, ModalCloseButton, ModalHeader,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
   TableCaption,
-  TableContainer,
   Card,
-  SimpleGrid,
-  CardHeader,
   Heading,
   CardBody,
-  CardFooter,
   Text,
-  Grid,
-  Link,Stack, StackDivider,Box
+  Stack, StackDivider,Box, CardHeader
 } from '@chakra-ui/react'
 
 import { useDisclosure } from '@chakra-ui/react'
 import { Chart } from "react-google-charts";
-import { CSVLink, CSVDownload } from "react-csv";
+import { CSVLink } from "react-csv";
 
 import {GridLoader} from 'react-spinners'
+import useFetchBearer from '../hooks/useFetchBearer';
+import { AdminCard } from './AdminCard';
+import { TableBestRated } from './TableBestRated';
 
 
 export const options = {
@@ -46,17 +43,9 @@ export const options = {
 
 export const Admin = () => {
     const [token, ] = useContext(UserContext)
-    const [userID, setUserID] = useState(0)
-    const [username, setUsername] = useState("")
-    const [first, setFirst] = useState("")
-    const [last, setLast] = useState("")
-    const [email, setEmail] = useState("")
-    const [desc, setDesc] = useState("")
-    const [role, setRole] = useState(0)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenInspire, onOpen: onOpenInspire, onClose: onCloseInspire } = useDisclosure()
 
-    const [bestRated, setBestRated] = useState([])
     const [newPassword, setNewPassword] = useState("")
     const [csvData, setCsvData] = useState([])
 
@@ -64,46 +53,11 @@ export const Admin = () => {
     const [story, setStory] = useState("")
     const [loadingTop, setLoadingTop] = useState(true)
 
+    const {data, loading,} = useFetchBearer("http://localhost:8000/users/me")
+    const {data: bestRated, loading: loadingBestRated, } = useFetchBearer("http://localhost:8000/reviews/top?limit=5")
+
     useEffect(()=>{
         async function func(){
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            }
-          }
-        
-          const response = await fetch("http://localhost:8000/users/me", requestOptions);
-          const data = await response.json()
-        
-          if(!response.ok){
-            console.log(response)
-          }
-          setDesc(data.description)
-          setEmail(data.email)
-          setFirst(data.first_name)
-          setLast(data.last_name)
-          setUserID(data.user_id)
-          setUsername(data.username)
-          setRole(data.role_id)
-
-          const requestOption = {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
-            }
-          }
-        
-          const respons = await fetch("http://localhost:8000/reviews/top?limit=5", requestOption);
-          const dat = await respons.json()
-        
-          if(!respons.ok){
-            console.log(response)
-          }
-          setBestRated(dat)
-          
           const requestOp = {
             method: "GET",
             headers: {
@@ -144,13 +98,13 @@ export const Admin = () => {
             body: JSON.stringify(
                 {
                 "password": password,
-                "first_name": first,
-                "last_name": last,
-                "description": desc,
-                "role_id": role
+                "first_name": data.first_name,
+                "last_name": data.last_name,
+                "description": data.description,
+                "role_id": data.role_id
               })
         }
-        const res  = await fetch(`http://localhost:8000/users/?user_id=${userID}`, requestOption);
+        const res  = await fetch(`http://localhost:8000/users/?user_id=${data.user_id}`, requestOption);
         if(!res.ok){
           console.log(res.json())
         }
@@ -203,63 +157,8 @@ export const Admin = () => {
     <>
     <HeaderCustom/>
     <InputGroup style={{display:'flex', justifyContent: 'space-around'}}>
-        <Card marginLeft={10} width={650} marginRight={10}>
-          <CardHeader>
-            <Heading size='md'>Account Report</Heading>
-          </CardHeader>
-          <CardBody>
-            <Stack divider={<StackDivider />} spacing='4'>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Username
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  {username}
-                </Text>
-              </Box>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Email
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  {email}
-                </Text>
-              </Box>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Description
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  {desc}
-                </Text>
-              </Box>
-              <Box>
-                <Heading size='xs' textTransform='uppercase'>
-                  Quote
-                </Heading>
-                <Text pt='2' fontSize='sm'>
-                  <Quote/>
-                </Text>
-              </Box>
-            </Stack>
-          </CardBody>
-        </Card>
-        <Table variant='striped' colorScheme='teal' marginRight={20}>
-          <TableCaption>Top 5 best rated animes</TableCaption>
-            <Thead>
-                <Tr>
-                <Th>Anime</Th>
-                <Th>Rating</Th>
-                </Tr>
-            </Thead>
-            <Tbody>
-            {bestRated.length > 0 && bestRated.map((item) =>
-            <Tr key={item.anime}>
-                <Td>{item.anime}</Td>
-                <Td>{item.rating}</Td>
-                </Tr>)}
-            </Tbody>
-        </Table>
+        {loading ? <GridLoader/> : <AdminCard data={data}/>}
+        {loadingBestRated ? <GridLoader/> : <TableBestRated bestRated={bestRated}/>}
     </InputGroup>
     <InputGroup marginLeft={10} style={{display:'flex', justifyContent: 'space-around'}}>
       <Stack marginLeft={10} marginTop={5}>
@@ -269,7 +168,7 @@ export const Admin = () => {
           <Button onClick={()=>{onOpenInspire();getStory()}}>
               Inspire me
           </Button>
-          {role == 1 && <CSVLink data={csvData}>Download report</CSVLink>}
+          {data !== null && data.role_id == 1 && <CSVLink data={csvData}>Download report</CSVLink>}
       </Stack>
         <Chart
         chartType="BarChart"

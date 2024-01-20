@@ -1,51 +1,24 @@
 import React from 'react'
 import { useContext, useEffect, useState } from "react";
 import {
-  Flex,
-  Heading,
   Input,
   Button,
   InputGroup,
   Stack,
-  InputLeftElement,
-  chakra,
-  Box,
   Link,
-  Avatar,
   FormControl,
-  FormHelperText,
-  InputRightElement,
   FormLabel
 } from "@chakra-ui/react";
 import { UserContext } from "../context/UserContext";
+import useFetchBearer from '../hooks/useFetchBearer';
 
 const CreateReview = () => {
     const [anime, setAnime] = useState("")
-    const [userID, setUserID] = useState(0)
     const [rating, setRating] = useState(0)
     const [content, setContent] = useState("")
     const [token,] = useContext(UserContext)
 
-
-    useEffect(()=>{
-        const fetchUser = async()=>{
-            const requestOptions = {
-                method: "GET",
-                RequestMode:'no-cors',
-                headers:{
-                    "Content-Type": "application/json",
-                    Authorization: "Bearer " + token
-                }
-            }
-            const response  = await fetch("http://localhost:8000/users/me", requestOptions);
-            const data = await response.json()
-            if(!response.ok){
-                console.log(response)
-            }
-            setUserID(data.user_id)
-        }
-        fetchUser()
-    }, [])
+    const {data: user, } = useFetchBearer("http://localhost:8000/users/me")
 
     const createReview = async (ani, use, rat, con ) =>{
         const requestOption = {
@@ -88,12 +61,13 @@ const CreateReview = () => {
           >
             <FormControl>
             <FormLabel>User ID</FormLabel>
+            {user !== null &&
               <InputGroup>
                 <Input
-                value={userID}
+                value={user.user_id}
                 disabled
                 />
-              </InputGroup>
+              </InputGroup>}
             </FormControl>
             <FormControl>
             <FormLabel>Anime name</FormLabel>
@@ -130,7 +104,7 @@ const CreateReview = () => {
               variant="solid"
               colorScheme="teal"
               width="full"
-              onClick={()=>{createReview(anime, userID, rating, content);}}
+              onClick={()=>{createReview(anime, user.user_id, rating, content);}}
             >
               Create
             </Button>

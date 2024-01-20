@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import axios from "axios"
+import { UserContext } from "../context/UserContext"
 
 
-export default function useFetch(url){
+export default function useFetchBearer(url){
+    
+    const [token, ] = useContext(UserContext)
 
     const [data,setData] = useState(null)
     const [error,setError] = useState(null)
@@ -13,7 +16,10 @@ export default function useFetch(url){
             async function(){
                 try{
                     setLoading(true)
-                    const response = await axios.get(url)
+                    const response = await axios.get(url,{headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                      }})
                     setData(response.data)
                 }catch(err){
                     setError(err)

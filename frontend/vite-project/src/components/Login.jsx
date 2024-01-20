@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Flex,
   Heading,
@@ -12,7 +12,6 @@ import {
   Link,
   Avatar,
   FormControl,
-  FormHelperText,
   InputRightElement
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
@@ -54,6 +53,7 @@ const Login = () => {
     const data = await response.json()
 
     if(!response.ok){
+      //TO-DO: ADD ERROR SCREEN NOT LOGGED IN
       console.log(data.detail)
     }else{
       setToken(data.access_token)

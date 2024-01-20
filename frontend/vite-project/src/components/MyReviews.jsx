@@ -1,31 +1,20 @@
 import React, { useContext, useEffect, useState} from 'react'
 import { UserContext } from '../context/UserContext'
-import HeaderCustom from './HeaderCustom'
 import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
-    TableContainer,
-    Flex,
-    Heading,
     Input,
     Button,
     Stack,
-    InputLeftElement,
-    chakra,
-    Box,
     Link,
-    Avatar,
     FormControl,
-    FormHelperText,
-    InputRightElement,
     FormLabel,
-    InputGroup
+    InputGroup,
+    TableContainer
   } from '@chakra-ui/react'
 import {
   Modal,
@@ -38,6 +27,7 @@ import {
 } from '@chakra-ui/react'
 import { useDisclosure } from '@chakra-ui/react'
 import Login from './Signup'
+import { CreateButton } from './CreateButton'
 
 const MyReviews = () => {
     const [token,] = useContext(UserContext)
@@ -88,7 +78,7 @@ const MyReviews = () => {
             }
             const response  = await fetch("http://localhost:8000/users/me", requestOptions);
             const data = await response.json()
-            const user_id = data.user_id
+            const user_id = await data.user_id
             
             const requestOption = {
                 method: "GET",
@@ -190,10 +180,7 @@ const MyReviews = () => {
         <div>
             {token ?
             <>
-            <Link href='/review/create'>
-              <Button>Create</Button>
-            </Link>
-
+            <CreateButton/>
             <TableContainer>
               <Table variant='striped' colorScheme='teal'>
               <Thead>
@@ -275,7 +262,7 @@ const MyReviews = () => {
                   </Modal>
                 </Td>
                 <Td>
-                  <Button onClick={onDeleteOpen}>Delete</Button>
+                  <Button onClick={()=>{onDeleteOpen();setFocused(item)}}>Delete</Button>
                   <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
                     <ModalOverlay />
                     <ModalContent>
@@ -289,7 +276,7 @@ const MyReviews = () => {
                         <Button colorScheme='blue' mr={3} onClick={onDeleteClose}>
                           Cancel
                         </Button>
-                        <Button variant='ghost' onClick={()=> {onDeleteClose();deleteReview(item.anime);}}>Confirm</Button>
+                        <Button variant='ghost' onClick={()=> {onDeleteClose();deleteReview(focused.anime);}}>Confirm</Button>
                       </ModalFooter>
                     </ModalContent>
                   </Modal>

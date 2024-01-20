@@ -1,17 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import HeaderCustom from '../components/HeaderCustom'
-import { UserContext } from '../context/UserContext'
-import Login from '../components/Login'
+import React, { useEffect, useState } from 'react'
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
   Card,
   SimpleGrid,
   CardHeader,
@@ -20,13 +8,11 @@ import {
   CardFooter,
   Button,
   Text,
-  Grid,
   Link,
 } from '@chakra-ui/react'
 import {GridLoader} from 'react-spinners'
 
 export const Explore = () => {
-    const [token, ] = useContext(UserContext)
     const [tableData, setTableData] = useState([])
     const [tableHot, setTableHot] = useState([])
     const [loadingTop, setLoadingTop] = useState(true)
@@ -110,9 +96,7 @@ export const Explore = () => {
               <Button>View here</Button>
               </a>
             </CardFooter>
-          </Card>
-            
-            
+          </Card> 
         ))}
        </SimpleGrid>
         }

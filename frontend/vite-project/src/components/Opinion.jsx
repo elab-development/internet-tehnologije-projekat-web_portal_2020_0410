@@ -44,16 +44,16 @@ export const Opinion = () => {
     <>
     <HeaderCustom/>
     <Card align='center' margin={40}>
-  <CardHeader>
-    <Heading size='md'> Get public opinion</Heading>
-  </CardHeader>
-  <CardBody>
-    <Text>Using web scraping and neural nets we can get public opinion regarding some anime</Text>
-  </CardBody>
-  <CardFooter>
-    <Button colorScheme='blue' onClick={onOpen}>View here</Button>
-  </CardFooter>
-  <Modal
+      <CardHeader>
+        <Heading size='md'> Get public opinion</Heading>
+      </CardHeader>
+      <CardBody>
+        <Text>Using web scraping and neural nets we can get public opinion regarding some anime</Text>
+      </CardBody>
+      <CardFooter>
+        <Button colorScheme='blue' onClick={onOpen}>View here</Button>
+      </CardFooter>
+      <Modal
         isCentered
         onClose={onClose}
         isOpen={isOpen}
@@ -64,37 +64,37 @@ export const Opinion = () => {
           <ModalHeader>Reddit opinion</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <InputGroup borderRadius={5} size="sm" marginTop={5} marginLeft={5}>
-        <InputLeftElement
-          pointerEvents="none"
-        />
-        <Input type="text" placeholder="Search..." border="1px solid #949494" value={name} onChange={(e)=>setName(e.target.value)} >
-        </Input>
-        <InputRightAddon
-          p={0}
-          border="none"
-          marginRight={10}
-        >
-          <Button size="sm" borderLeftRadius={0} borderRightRadius={3.3} border="1px solid #949494" onClick={func}>
-            Search
-          </Button>
-        </InputRightAddon>
-      </InputGroup>
-      <InputGroup>
-      <Input value={historyName} disabled>
-      </Input>
-      <Input value={opinion} disabled>
-      </Input>
-      </InputGroup>
+            <InputGroup borderRadius={5} size="sm" marginTop={5} marginLeft={5}>
+              <InputLeftElement
+                pointerEvents="none"
+              />
+              <Input type="text" placeholder="Search..." border="1px solid #949494" value={name} onChange={(e)=>setName(e.target.value)} >
+              </Input>
+              <InputRightAddon
+                p={0}
+                border="none"
+                marginRight={10}
+              >
+                <Button size="sm" borderLeftRadius={0} borderRightRadius={3.3} border="1px solid #949494" onClick={func}>
+                  Search
+                </Button>
+              </InputRightAddon>
+            </InputGroup>
+            <InputGroup>
+              <Input value={historyName} disabled>
+              </Input>
+              <Input value={opinion} disabled>
+              </Input>
+          </InputGroup>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={()=>{onClose();setHistoryName(""), setOpinion("")}}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={()=>{onClose();setHistoryName(""), setOpinion("")}}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
       </Modal>
-</Card>
+  </Card>
 </>
   )
 }

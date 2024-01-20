@@ -7,15 +7,11 @@ import {
   InputGroup,
   Stack,
   InputLeftElement,
-  chakra,
-  Box,
   Link,
   Avatar,
   FormControl,
-  FormHelperText,
   InputRightElement
 } from "@chakra-ui/react";
-import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 
@@ -23,7 +19,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [, setToken] = useContext(UserContext)
   const [username, setUsername] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")

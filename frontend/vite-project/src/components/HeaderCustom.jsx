@@ -1,6 +1,5 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { Button } from "@chakra-ui/react";
 import NavBar from "./Navbar";
 
 const HeaderCustom = ()=>{
