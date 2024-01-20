@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Text } from '@chakra-ui/react'
 import { UserContext } from '../context/UserContext'
 

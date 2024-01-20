@@ -1,28 +1,10 @@
 import React from 'react'
 import HeaderCustom from './HeaderCustom'
-import { Quote } from './Quote'
-import { Button, Input, InputGroup} from '@chakra-ui/react'
 import { UserContext } from "../context/UserContext";
 import { useContext, useState, useEffect } from "react";
-import { Modal, ModalOverlay, ModalBody, ModalFooter, ModalContent, ModalCloseButton, ModalHeader,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  Card,
-  Heading,
-  CardBody,
-  Text,
-  Stack, StackDivider,Box, CardHeader
-} from '@chakra-ui/react'
-
-import { useDisclosure } from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalBody, ModalFooter, ModalContent, ModalCloseButton, ModalHeader,Text,Stack, useDisclosure,Button, Input, InputGroup } from '@chakra-ui/react'
 import { Chart } from "react-google-charts";
 import { CSVLink } from "react-csv";
-
 import {GridLoader} from 'react-spinners'
 import useFetchBearer from '../hooks/useFetchBearer';
 import { AdminCard } from './AdminCard';

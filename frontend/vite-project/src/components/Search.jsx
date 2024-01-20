@@ -1,36 +1,9 @@
 import React, {useState, useContext, useEffect } from "react";
-import {
-  Button,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightAddon,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  Text
+import { Button, Input, InputGroup, InputLeftElement, InputRightAddon, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Text, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Stack, FormControl, FormLabel, useDisclosure
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import HeaderCustom from "./HeaderCustom";
 import { UserContext } from "../context/UserContext";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Stack,
-  FormControl,
-  FormLabel
-} from '@chakra-ui/react'
-
-import { useDisclosure } from '@chakra-ui/react'
 
 export const Search = () => {
     const [anime, setAnime] = useState("")

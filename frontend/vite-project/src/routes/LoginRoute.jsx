@@ -1,17 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import HeaderCustom from '../components/HeaderCustom'
 import { UserContext } from '../context/UserContext'
 import Login from '../components/Login'
-import {
-  Card,
-  SimpleGrid,
-  CardHeader,
-  Heading,
-  CardBody,
-  CardFooter,
-  Button,
-  Text
-} from '@chakra-ui/react'
 import {GridLoader} from 'react-spinners'
 import "./Login.css"
 import { TopPosts } from '../components/TopPosts'

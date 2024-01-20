@@ -1,31 +1,6 @@
 import React, { useContext, useEffect, useState} from 'react'
 import { UserContext } from '../context/UserContext'
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    Input,
-    Button,
-    Stack,
-    Link,
-    FormControl,
-    FormLabel,
-    InputGroup,
-    TableContainer
-  } from '@chakra-ui/react'
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react'
-import { useDisclosure } from '@chakra-ui/react'
+import {Table,Thead,Tbody,Tr,Th,Td,Input,Button,Stack,FormControl,FormLabel, InputGroup, TableContainer,  Modal, ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton, useDisclosure} from '@chakra-ui/react'
 import Login from './Signup'
 import { CreateButton } from './CreateButton'
 

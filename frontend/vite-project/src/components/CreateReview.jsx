@@ -1,14 +1,6 @@
 import React from 'react'
-import { useContext, useEffect, useState } from "react";
-import {
-  Input,
-  Button,
-  InputGroup,
-  Stack,
-  Link,
-  FormControl,
-  FormLabel
-} from "@chakra-ui/react";
+import { useContext, useState } from "react";
+import { Input,Button,InputGroup,Stack,Link,FormControl,FormLabel } from "@chakra-ui/react";
 import { UserContext } from "../context/UserContext";
 import useFetchBearer from '../hooks/useFetchBearer';
 

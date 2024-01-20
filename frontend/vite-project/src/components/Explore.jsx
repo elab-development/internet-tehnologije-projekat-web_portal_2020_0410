@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Card,
-  SimpleGrid,
-  CardHeader,
-  Heading,
-  CardBody,
-  CardFooter,
-  Button,
-  Text,
-  Link,
-} from '@chakra-ui/react'
+import { Card, SimpleGrid, CardHeader, Heading, CardBody, CardFooter, Button, Text, Link } from '@chakra-ui/react'
 import {GridLoader} from 'react-spinners'
 
 export const Explore = () => {

@@ -1,19 +1,7 @@
-import React from "react";
-import { Link, Box, Flex, Text, Button, Stack } from "@chakra-ui/react";
 import { UserContext } from "../context/UserContext";
-import { useContext, useState, useEffect } from "react";
-
+import React, { useContext, useState, useEffect } from "react";
 import Logo from "../crown.svg?react";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-} from '@chakra-ui/react'
-import { useDisclosure } from '@chakra-ui/react'
+import {Link, Box, Flex, Text, Button, Stack, Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton, useDisclosure} from '@chakra-ui/react'
 
 const NavBar = (props) => {
   const [isOpen, setIsOpen] = useState(false);

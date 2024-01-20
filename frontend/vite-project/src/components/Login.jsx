@@ -1,19 +1,5 @@
 import { useContext, useState } from "react";
-import {
-  Flex,
-  Heading,
-  Input,
-  Button,
-  InputGroup,
-  Stack,
-  InputLeftElement,
-  chakra,
-  Box,
-  Link,
-  Avatar,
-  FormControl,
-  InputRightElement
-} from "@chakra-ui/react";
+import { Flex, Heading, Input, Button, InputGroup, Stack, InputLeftElement, chakra, Box, Link, Avatar, FormControl, InputRightElement} from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import { UserContext } from "../context/UserContext";
 

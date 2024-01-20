@@ -1,17 +1,5 @@
-import { useState, useContext } from "react";
-import {
-  Flex,
-  Heading,
-  Input,
-  Button,
-  InputGroup,
-  Stack,
-  InputLeftElement,
-  Link,
-  Avatar,
-  FormControl,
-  InputRightElement
-} from "@chakra-ui/react";
+import { useState } from "react";
+import { Flex, Heading, Input, Button, InputGroup, Stack, InputLeftElement, Link, Avatar, FormControl, InputRightElement } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 

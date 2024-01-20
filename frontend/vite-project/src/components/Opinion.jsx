@@ -1,20 +1,6 @@
 import React, { useState } from 'react'
-import { Card, Text, CardHeader, Button, CardFooter, Heading, CardBody } from '@chakra-ui/react'
 import HeaderCustom from './HeaderCustom'
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Input,
-    InputGroup,
-    InputLeftElement,
-    InputRightAddon,
-  } from '@chakra-ui/react'
-import { useDisclosure } from '@chakra-ui/react'
+import { Card, Text, CardHeader, Button, CardFooter, Heading, CardBody, useDisclosure, Modal,ModalOverlay,ModalContent,ModalHeader,ModalFooter,ModalBody,ModalCloseButton,Input,InputGroup,InputLeftElement,InputRightAddon } from '@chakra-ui/react'
 
 export const Opinion = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
