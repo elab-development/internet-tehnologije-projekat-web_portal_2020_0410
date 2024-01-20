@@ -74,7 +74,7 @@ def delete_anime(anime_id: str, db: Session = Depends(get_db)):
     if anime is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"anime cant be found")
 
-    anime.delete(synchronize_session=False)
+    anime_query.delete(synchronize_session=False)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -126,7 +126,7 @@ def get_statistics(db: Session = Depends(get_db)):
 
 
 @router.get('/story')
-def get_statistics():
+def get_story():
     story_gen = pipeline("text-generation", "pranavpsv/gpt2-genre-story-generator")
     s = "story "
     while len(s) < 1000:
